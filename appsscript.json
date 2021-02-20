@@ -1,0 +1,26 @@
+{
+  "timeZone": "America/New_York",
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "dependencies": {
+    "enabledAdvancedServices": [
+      {
+        "userSymbol": "Sheets",
+        "version": "v4",
+        "serviceId": "sheets"
+      }
+    ]
+  },
+  "sheets": {
+    "macros": [
+      {
+        "menuName": "clearYearData",
+        "functionName": "clearYearData"
+      },
+      {
+        "menuName": "setDefaultBlueprintFormatting",
+        "functionName": "setDefaultBlueprintFormatting"
+      }
+    ]
+  }
+}
