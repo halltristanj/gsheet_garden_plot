@@ -63,7 +63,8 @@ function menuTransferBlueprint() {
 
 function displayMenu() {
   var ui = SpreadsheetApp.getUi();
-  ui.createMenu('Garden')
+  // ui.createMenu('Garden')
+  ui.createAddonMenu()
     .addSubMenu(ui.createMenu('Garden')
       .addItem('Create', 'main')
       .addItem('Format Garden', 'menuFormatWhichGarden')
@@ -75,4 +76,9 @@ function displayMenu() {
       .addItem('Copy Records from AirTable', 'airTableToSeeds')
     )
     .addToUi();
+
+  // ui.createAddonMenu()
+      // .addItem('Show', 'showSidebar')
+      // .addToUi();
+
 }

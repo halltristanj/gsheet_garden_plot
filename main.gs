@@ -1,11 +1,11 @@
+/**
+ * @OnlyCurrentDoc
+ */
+
 function main() {
   var clear = alertClearGrid();
   if(!clear) { 
     return;
-  }
-  const pullFromAirTable = getConfigValue('Pull From AirTable');
-  if(pullFromAirTable) {
-    airTableToSeeds();
   }
   
   setGardenGridFormat(GARDEN_SHEET);
@@ -15,7 +15,7 @@ function main() {
   blueprintToSheet(GARDEN_SHEET); // Transfer `Blueprint` to `Garden` sheet
   blueprintToSheet(SOWED_SHEET); // Transfer `Blueprint` to `Sowed` sheet
 
-  // // Conditional format a grid on what has been used.
+  // Conditional format a grid on what has been used.
   var availGrid = setAvailablePlantsGrid();
   setAvailablePlantsConditionalFormatting(availGrid);
   setPlantLimitConditionalFormatting();

@@ -1,26 +1,19 @@
 {
   "timeZone": "America/New_York",
+  "dependencies": {
+    "enabledAdvancedServices": [{
+      "userSymbol": "Sheets",
+      "serviceId": "sheets",
+      "version": "v4"
+    }]
+  },
   "exceptionLogging": "STACKDRIVER",
   "runtimeVersion": "V8",
-  "dependencies": {
-    "enabledAdvancedServices": [
-      {
-        "userSymbol": "Sheets",
-        "version": "v4",
-        "serviceId": "sheets"
-      }
-    ]
-  },
-  "sheets": {
-    "macros": [
-      {
-        "menuName": "clearYearData",
-        "functionName": "clearYearData"
-      },
-      {
-        "menuName": "setDefaultBlueprintFormatting",
-        "functionName": "setDefaultBlueprintFormatting"
-      }
-    ]
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/script.container.ui",
+    "https://www.googleapis.com/auth/spreadsheets"
+  ],
+  "addOns": {
+    "sheets": {}
   }
 }
