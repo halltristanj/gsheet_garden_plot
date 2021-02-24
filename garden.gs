@@ -1,13 +1,15 @@
 function setPlantLimitConditionalFormatting () {
   // over garden grid, apply formula: =AND(ISTEXT(A1),COUNTIF($A$1:$M$11, A1)>3)
-  var blueprint = BLUEPRINT_SHEET.getDataRange();
+  const blueprintSheet = SHEET('Blueprint');
+  const gardenSheet = SHEET('Garden');
+  var blueprint = blueprintSheet.getDataRange();
   var firstCol = blueprint.getColumn();
   var lastCol = blueprint.getLastColumn();
   var firstRow = blueprint.getRow();
   var lastRow = blueprint.getLastRow();
   var plantLimit = getConfigValue('Plant Limit');
 
-  var range = GARDEN_SHEET.getRange(firstRow, firstRow, (lastRow - firstRow) + 1, (lastCol - firstCol) + 1);
+  var range = gardenSheet.getRange(firstRow, firstRow, (lastRow - firstRow) + 1, (lastCol - firstCol) + 1);
 
   var colors = getColorScale();
   var startI = 1;
@@ -47,31 +49,34 @@ function setPlantLimitConditionalFormatting () {
       .setRanges([range])
       .build();
 
-    var rules = GARDEN_SHEET.getConditionalFormatRules();
+    var rules = gardenSheet.getConditionalFormatRules();
     rules.push(rule);
-    GARDEN_SHEET.setConditionalFormatRules(rules);
+    gardenSheet.setConditionalFormatRules(rules);
   }
 }
 
 function setAvailablePlantsGrid() {
   // Create a row that is as long as the garden, then go to next column
+  const blueprintSheet = SHEET('Blueprint');
+  const gardenSheet = SHEET('Garden');
+  const seedsSheet = SHEET('Seeds')
 
-  var lastCol = BLUEPRINT_SHEET.getDataRange().getLastColumn();
+  var lastCol = blueprintSheet.getDataRange().getLastColumn();
   var gridStartCol = lastCol + 2;
   var col = gridStartCol;
-  var gardenSheetDataRange = GARDEN_SHEET.getDataRange();
-  var startGardenRow = gardenSheetDataRange.getRow();
-  var endGardenRow = gardenSheetDataRange.getLastRow();
-  var startGardenCol = gardenSheetDataRange.getColumn();
-  var endGardenCol = gardenSheetDataRange.getLastColumn();
+  var blueprintSheetDataRange = blueprintSheet.getDataRange();
+  var startGardenRow = blueprintSheetDataRange.getRow();
+  var endGardenRow = blueprintSheetDataRange.getLastRow();
+  var startGardenCol = blueprintSheetDataRange.getColumn();
+  var endGardenCol = blueprintSheetDataRange.getLastColumn();
 
   // Clear everything to the right of the garden grid.
-  GARDEN_SHEET.getRange(1, col, 200, 200).clearContent().setBackground(null).clearFormat()
+  gardenSheet.getRange(1, col, 200, 200).clearContent().setBackground(null).clearFormat()
       .setHorizontalAlignment('center')
       .setVerticalAlignment('middle');
 
-  var plants = SEEDS_SHEET.getDataRange().getValues();
-  var rowLength = BLUEPRINT_SHEET.getDataRange().getLastRow();
+  var plants = seedsSheet.getDataRange().getValues();
+  var rowLength = blueprintSheet.getDataRange().getLastRow();
 
   var insertRow = 2; // leave row 1 for title.
   var maxRow = 2;
@@ -90,8 +95,7 @@ function setAvailablePlantsGrid() {
       toInsert
     );
 
-    GARDEN_SHEET.getRange(insertRow, col, toInsert.length, 1)
-      // .setValues([toInsert])
+    gardenSheet.getRange(insertRow, col, toInsert.length, 1)
       .setWrap(true)
       .setBackground(GREY)
       .setFormula(formula);
@@ -106,20 +110,27 @@ function setAvailablePlantsGrid() {
       maxRow = r;
     }
   }
-  GARDEN_SHEET.autoResizeColumns(gridStartCol, col - lastCol);
-  GARDEN_SHEET.getRange(2, gridStartCol, rowLength - 1, (col - gridStartCol) + 1).setBorder(false, true, true, true, false, false);
-  GARDEN_SHEET.getRange(1, gridStartCol).setValue(['Available Plants']);
-  GARDEN_SHEET.getRange(1, gridStartCol, 1, col - lastCol -1)
+  gardenSheet.autoResizeColumns(gridStartCol, col - lastCol);
+  gardenSheet.getRange(2, gridStartCol, rowLength - 1, (col - gridStartCol) + 1).setBorder(false, true, true, true, false, false);
+  gardenSheet.getRange(1, gridStartCol).setValue(['Available Plants']).setWrap(true);
+  gardenSheet.getRange(1, gridStartCol, 1, col - lastCol -1)
     .merge()
     .setVerticalAlignment('middle')
     .setHorizontalAlignment('center')
     .setBorder(true, true, true, true, true, true, 'black', SpreadsheetApp.BorderStyle.SOLID_THICK);
 
-  return GARDEN_SHEET.getRange(2, gridStartCol, maxRow, col - gridStartCol);
+  var nCols = col - gridStartCol;
+  if(nCols === 0) {
+    nCols = 1;
+  }
+  return gardenSheet.getRange(2, gridStartCol, maxRow, nCols);
 }
 
 function setAvailablePlantsConditionalFormatting(availGrid) {
-  GARDEN_SHEET.clearConditionalFormatRules();
+  const gardenSheet = SHEET('Garden');
+  const blueprintSheet = SHEET('Blueprint');
+
+  gardenSheet.clearConditionalFormatRules();
 
   var condRanges = [];
   var firstCol = availGrid.getColumn();
@@ -128,14 +139,14 @@ function setAvailablePlantsConditionalFormatting(availGrid) {
   var lastRow = availGrid.getLastRow()
 
   for(var c = firstCol; c <= lastCol + 1; c++) {
-    var range = GARDEN_SHEET.getRange(firstRow, c, (lastRow - firstRow) + 1, 1);
+    var range = gardenSheet.getRange(firstRow, c, (lastRow - firstRow) + 1, 1);
     condRanges.push(range);
   }
 
   // Gray out those plants that have already been used.
 
   // Get the range of the garden.
-  var gardenRange = BLUEPRINT_SHEET.getDataRange();
+  var gardenRange = blueprintSheet.getDataRange();
 
   var gardenFirstColLetter = columnToLetter(gardenRange.getColumn());
   var gardenLastColLetter = columnToLetter(gardenRange.getLastColumn());
@@ -161,8 +172,8 @@ function setAvailablePlantsConditionalFormatting(availGrid) {
       .setRanges([range])
       .build();
 
-    var rules = GARDEN_SHEET.getConditionalFormatRules();
+    var rules = gardenSheet.getConditionalFormatRules();
     rules.push(rule);
-    GARDEN_SHEET.setConditionalFormatRules(rules);
+    gardenSheet.setConditionalFormatRules(rules);
   });
 }

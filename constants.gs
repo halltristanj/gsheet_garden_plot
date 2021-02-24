@@ -1,20 +1,17 @@
 const THIS_YEAR = new Date().getFullYear();
-const GARDEN_SHEET = SpreadsheetApp.getActive().getSheetByName('Garden');
-const BLUEPRINT_SHEET = SpreadsheetApp.getActive().getSheetByName('Blueprint');
-const SEEDS_SHEET = SpreadsheetApp.getActive().getSheetByName('Seeds');
-const COLORS_SHEET = SpreadsheetApp.getActive().getSheetByName('Colors');
-const SOWED_SHEET = SpreadsheetApp.getActive().getSheetByName('Sowed');
 const GREY = '#F0F0F0';
+const SHEETS = ['Seeds', 'Garden', 'Sowed', 'Blueprint', 'Config', 'Colors'];
 
-// DATA VALIDATION RULES
-const SEEDS_RULE = SpreadsheetApp.newDataValidation()
-  .requireValueInRange(SEEDS_SHEET.getDataRange(), true)
-  .setHelpText('Select a seed')
-  .setAllowInvalid(false)
-  .build();
+function ACTIVE_SHEET() {
+  const activeSheet = SpreadsheetApp.getActive();
+  return activeSheet;
+}
 
-function columnToLetter(column)
-{
+function SHEET(sheetName) {
+  return ACTIVE_SHEET().getSheetByName(sheetName)
+}
+
+function columnToLetter(column) {
   var temp, letter = '';
   while (column > 0)
   {
@@ -25,8 +22,7 @@ function columnToLetter(column)
   return letter;
 }
 
-function letterToColumn(letter)
-{
+function letterToColumn(letter) {
   var column = 0, length = letter.length;
   for (var i = 0; i < length; i++)
   {
