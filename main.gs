@@ -7,6 +7,7 @@
  * - [] When setting availablePlantsGrid, if plants are equal in row length, a new column is created (uneccessary)
  * - [] Set tab color for Garden/Sowed
  * - [] onEdit when edit grid size - automatically resize Garden/Sowed/Blueprint
+ * - [] onEdit when Plant Limit changes - automatically reset conditional formatting (cannot cross-reference sheets via app script)
  */
 
 function main(clearAlert=true) {
@@ -29,8 +30,8 @@ function main(clearAlert=true) {
   blueprintToSheet(sowedSheet); // Transfer `Blueprint` to `Sowed` sheet
 
   // Conditional format a grid on what has been used.
-  var availGrid = setAvailablePlantsGrid();
-  setAvailablePlantsConditionalFormatting(availGrid);
+  setAvailablePlantsGrid();
+  // setAvailablePlantsConditionalFormatting(availGrid);
   setPlantLimitConditionalFormatting();
 }
 

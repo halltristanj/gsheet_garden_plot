@@ -9,6 +9,8 @@ function setPlantLimitConditionalFormatting () {
   var lastRow = blueprint.getLastRow();
   var plantLimit = getConfigValue('Plant Limit');
 
+  gardenSheet.clearConditionalFormatRules();
+
   var range = gardenSheet.getRange(firstRow, firstRow, (lastRow - firstRow) + 1, (lastCol - firstCol) + 1);
 
   var colors = getColorScale();

@@ -21,6 +21,7 @@ function menuFormatWhichGarden() {
 
   if (result == ui.Button.YES) {
     setGardenGridFormat();
+    setPlantLimitConditionalFormatting();
   }
 }
 
@@ -59,6 +60,6 @@ function displayMenu() {
     .addItem('Format Sheet', 'menuFormatWhichGarden')
     .addItem('Set Grid Size', 'menuSetCellSize')
     .addItem('Transfer Blueprint', 'menuTransferBlueprint')
-    .addItem('Initialize', 'init')
+    .addItem('Initialize Example', 'init')
     .addToUi();
 }

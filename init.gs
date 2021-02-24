@@ -13,6 +13,7 @@ function init() {
   exampleColors();
   exampleBlueprint();
   exampleSeeds();
+  exampleHowTo();
   main(clearAlert=false);
   ACTIVE_SHEET().setActiveSheet(SHEET('Garden'));
   exampleGarden();
@@ -137,7 +138,13 @@ function exampleGarden() {
       var dataValidation = gardenSheet.getRange(r+1, c+1, 1, 1).getDataValidation();
       var toPlant = null;
       if(dataValidation) {
-        toPlant = seeds[Math.floor(Math.random() * seeds.length)][0]
+        var index = Math.floor(Math.random() * seeds.length);
+        var blank = Math.random();
+        if(blank <= 0.1 && blank >= 0.0) {
+          toPlant = null;
+        } else {
+          toPlant = seeds[index][0]
+        }
       }
       plantColumn.push(toPlant);
     }
@@ -145,4 +152,44 @@ function exampleGarden() {
     plants.push(plantColumn);
   }
   gardenSheet.getRange(1, 1, plants.length, plants[0].length).setValues(plants);
+}
+
+function exampleHowTo() {
+  // Explain how to do things.
+  const sheetName = 'HOWTO'
+  const activeSheet = ACTIVE_SHEET()
+  const currentSheet = activeSheet.getSheetByName(sheetName);
+
+  if(currentSheet) {
+    Logger.log('Sheet ' + sheetName + ' already exists. Deleting.');
+    activeSheet.deleteSheet(activeSheet.getSheetByName(sheetName));
+  }
+  const howtoSheet = activeSheet.insertSheet(sheetName);
+
+  howtoSheet.getRange(1, 1).setValue(['Welcome to My Garden!']).setFontSize(18).setFontWeight('bold');
+
+  howtoSheet.getRange(2, 1, 4).setValues([
+    ['When you installed this, a bunch of sheets and fake data were created.'],
+    ['These are example data and you will be editing them to make your garden.'],
+    ['If the data were not created, click Add-on -> Garden -> Initialize Example'],
+    [null]
+  ]);
+
+  howtoSheet.getRange(6, 1).setValue(['Seeds']).setFontSize(16).setFontWeight('bold');
+  howtoSheet.getRange(7, 1, 2).setValues([
+    ["The 'Seeds' Sheet houses the seeds you'd like to plant this season."],
+    [null]
+  ]);
+
+  howtoSheet.getRange(9, 1).setValue(['Blueprint']).setFontSize(16).setFontWeight('bold');
+  howtoSheet.getRange(10, 1, 3).setValues([
+    ["The 'Blueprint' Sheet houses what you want your garden to look like."],
+    ["This template is built on the 'square foot garden' ideology where your garden is seperated into 1'x1' grids."],
+    [null]
+  ]);
+
+  howtoSheet.getRange(13, 1).setValue(['Sowed']).setFontSize(16).setFontWeight('bold');
+  howtoSheet.getRange(14, 1, 1).setValues([
+    ['This is where you can mark what seeds you have already sowed.']
+  ]);
 }
