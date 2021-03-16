@@ -6,8 +6,15 @@ function blueprintToSheet(sheet) {
     sheet = SpreadsheetApp.getActiveSheet();
   }
 
-  var maxRows = sheet.getMaxRows();
-  var maxCols = sheet.getMaxColumns();
+  const maxRows = sheet.getMaxRows();
+  const maxCols = sheet.getMaxColumns();
+  const blueprintSheet = SHEET('Blueprint');
+  const seedsRule = SpreadsheetApp.newDataValidation()
+    .requireValueInRange(SHEET('Seeds').getDataRange(), true)
+    .setHelpText('Select a seed')
+    .setAllowInvalid(false)
+    .build();;
+
   sheet.getRange(1, 1, maxRows, maxCols)
     .clearContent()
     .clearFormat()
@@ -16,7 +23,7 @@ function blueprintToSheet(sheet) {
     .setVerticalAlignment('middle');
 
   // Get the dimensions of the garden from 'Blueprint'
-  var blueprint_range = BLUEPRINT_SHEET.getDataRange();
+  var blueprint_range = blueprintSheet.getDataRange();
   var blueprint_values = blueprint_range.getValues();
   
   // Copy Dimensions of blueprint_range to Garden Sheet
@@ -30,15 +37,15 @@ function blueprintToSheet(sheet) {
       blueprint_values[r][c] = cell ? true : false
 
       setBlueprintTargetGridLinesFormat(sheet, c, r, blueprint_values);
-      setBlueprintTargetDataValidation(sheet, c, r, blueprint_values);   
+      setBlueprintTargetDataValidation(sheet, c, r, blueprint_values, seedsRule);   
     }
   }
   return blueprint_values;
 }
 
-function setBlueprintTargetDataValidation(sheet, c, r, blueprint_values) {
+function setBlueprintTargetDataValidation(sheet, c, r, blueprint_values, seedsRule) {
   if(blueprint_values[r][c]) {
-    sheet.getRange(r + 1, c + 1).setDataValidation(SEEDS_RULE);
+    sheet.getRange(r + 1, c + 1).setDataValidation(seedsRule);
   }
 }
 
@@ -79,6 +86,5 @@ function setBlueprintTargetGridLinesFormat(sheet, c, r, blueprint_values) {
     )
     .setBackground(GREY)
     .setWrap(true);
-    // .setTextRotation(45);
   }
 }

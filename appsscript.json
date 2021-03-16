@@ -1,26 +1,25 @@
 {
   "timeZone": "America/New_York",
-  "exceptionLogging": "STACKDRIVER",
-  "runtimeVersion": "V8",
   "dependencies": {
     "enabledAdvancedServices": [
       {
         "userSymbol": "Sheets",
-        "version": "v4",
-        "serviceId": "sheets"
+        "serviceId": "sheets",
+        "version": "v4"
       }
     ]
   },
-  "sheets": {
-    "macros": [
-      {
-        "menuName": "clearYearData",
-        "functionName": "clearYearData"
-      },
-      {
-        "menuName": "setDefaultBlueprintFormatting",
-        "functionName": "setDefaultBlueprintFormatting"
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/script.container.ui",
+    "https://www.googleapis.com/auth/spreadsheets"
+  ],
+  "addOns": {
+    "sheets": {
+      "onFileScopeGrantedTrigger": {
+        "runFunction": "init"
       }
-    ]
+    }
   }
 }

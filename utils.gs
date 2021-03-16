@@ -13,15 +13,18 @@ function setGardenGridFormat(sheet) {
 }
 
 function setGridSize(cellSize) {
-  const maxRows = BLUEPRINT_SHEET.getMaxRows();
-  const maxCols = BLUEPRINT_SHEET.getMaxColumns();
+  const blueprintSheet = SHEET('Blueprint');
+  const gardenSheet = SHEET('Garden');
+  const sowedSheet = SHEET('Sowed');
+  const maxRows = blueprintSheet.getMaxRows();
+  const maxCols = blueprintSheet.getMaxColumns();
   if(!cellSize){
     cellSize = getConfigValue('Grid Size');
   }
 
   Logger.log('Setting grid size to: ' + cellSize);
 
-  BLUEPRINT_SHEET.setRowHeights(1, maxRows, cellSize).setColumnWidths(1, maxCols, cellSize);
-  GARDEN_SHEET.setRowHeights(1, maxRows, cellSize).setColumnWidths(1, maxCols, cellSize);
-  SOWED_SHEET.setRowHeights(1, maxRows, cellSize).setColumnWidths(1, maxCols, cellSize);
+  blueprintSheet.setRowHeights(1, maxRows, cellSize).setColumnWidths(1, maxCols, cellSize);
+  gardenSheet.setRowHeights(1, maxRows, cellSize).setColumnWidths(1, maxCols, cellSize);
+  sowedSheet.setRowHeights(1, maxRows, cellSize).setColumnWidths(1, maxCols, cellSize);
 }
